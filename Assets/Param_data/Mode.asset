@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a645e2d2c6b716489a871de5a42992c, type: 3}
+  m_Name: Mode
+  m_EditorClassIdentifier: 
+  DelayVehicle: 1
+  ProposedMethod: 0
+  ConstantB: 0
+  Mounted: 0
+  ZeroVelocity: 0
+  ConstantVelocity: 1
+  ExperimentData: 0
+  GamepadInput: 1
+  CarOutline: 0
+  MasterOutline: 1
+  SlaveOutline: 0
