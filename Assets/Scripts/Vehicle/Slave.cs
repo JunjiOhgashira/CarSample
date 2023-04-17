@@ -26,6 +26,7 @@ namespace Vehicle
         public ShareParam shareParam;
         public ModeChange mode;
         public UnitAdjuster unitAdjuster;
+        public QuoteFromCsv quoteFromCsv;
 
         public Master master;
 
@@ -40,6 +41,8 @@ namespace Vehicle
         public int now;
         [HideInInspector]
         public int oneWayDelayIndex;
+        [HideInInspector]
+        public int roundTripDelayIndex;
 
         [HideInInspector]
         public double betas;
@@ -47,13 +50,13 @@ namespace Vehicle
         public double omegas;
         [HideInInspector]
         public double deltas;
-        //[HideInInspector]
+        [HideInInspector]
         public double thetas;
         [HideInInspector]
         public double pxs;
         [HideInInspector]
         public double pys;
-        [HideInInspector]
+        //[HideInInspector]
         public double Vs;
         [HideInInspector]
         public double us;
@@ -119,6 +122,8 @@ namespace Vehicle
         public double pysPast;
         [HideInInspector]
         public double pxsPast;
+        [HideInInspector]
+        public double LowerLimitVelocity;
 
         [HideInInspector]
         public double[,] A = new double[2, 2];
@@ -166,6 +171,10 @@ namespace Vehicle
             b1  = 2 * Kf / M;
             b2  = 2 * lf * Kf / I;
 
+            Vs = mode.ExperimentDataVelocity ? quoteFromCsv.Velocity : (ConstantVelocity ? V : V0);
+
+            LowerLimitVelocity = unitAdjuster.LowerLimitVelocity_m_s;
+
             A = new double[,] { { -a11 / V, -1 - a12 / (V * V) }, { -a21, -a22 / V } };
             B = new double[,] { { b1 / V }, { b2 } };
 
@@ -187,7 +196,7 @@ namespace Vehicle
             d.thetas = 0;
             d.pxs    = 0;
             d.pys    = 0;
-            d.Vs     = ConstantVelocity ? V : V0;
+            d.Vs     = Vs;
             d.us     = 0;
             d.vs     = 0;
 
@@ -196,6 +205,7 @@ namespace Vehicle
 
         void FixedUpdate()
         {
+            Debug.Log(Vs);
             GetTimeInformation();
             GetVelocity();
             GetSteeringInput();
@@ -209,6 +219,7 @@ namespace Vehicle
             dt = Time.deltaTime;
             now = (int)(Time.time * 1000);
             oneWayDelayIndex = master.oneWayDelayIndex;
+            roundTripDelayIndex = master.roundTripDelayIndex;
             tmp = Time.time;
         }
 
@@ -236,16 +247,15 @@ namespace Vehicle
 
         void VehicleModel()
         {
-            A = new double[,] { { -a11 / V, -1 - a12 / (V * V) }, { -a21, -a22 / V } };
-            B = new double[,] { { b1 / V }, { b2 } };
-
-            if (ZeroVelocity)
+            if (ZeroVelocity || Vs < LowerLimitVelocity)
             {
                 betas += 0;
                 omegas += 0;
             }
             else
             {
+                A = new double[,] { { -a11 / Vs, -1 - a12 / (Vs * Vs) }, { -a21, -a22 / Vs } };
+                B = new double[,] { { b1 / Vs }, { b2 } };
                 betas += (A[0, 0] * betas + A[0, 1] * omegas + B[0, 0] * deltas) * dt;
                 omegas += (A[1, 0] * betas + A[1, 1] * omegas + B[1, 0] * deltas) * dt;
             }
@@ -253,17 +263,17 @@ namespace Vehicle
 
         void UpdatePosition()
         {
-            thetas += omegas * dt;
-
-            if (ZeroVelocity)
+            if (ZeroVelocity || Vs < LowerLimitVelocity)
             {
+                thetas += 0;
                 pxs += 0;
                 pys += 0;
             }
             else
             {
-                pxs += V * Math.Cos((thetas + betas) * Math.PI / 180) * dt;
-                pys += V * Math.Sin((thetas + betas) * Math.PI / 180) * dt;
+                thetas += omegas * dt;
+                pxs += Vs * Math.Cos((thetas + betas) * Math.PI / 180) * dt;
+                pys += Vs * Math.Sin((thetas + betas) * Math.PI / 180) * dt;
             }
 
             transform.eulerAngles = new Vector3(0, (float)thetas, 0);

@@ -18,16 +18,19 @@ public class ModeChange : ScriptableObject
     [Label("カメラ視点（上から）")]
     public bool Mounted;
 
-    [Label("速度0")]
+    [Label("速度0"), DisableIf(EConditionOperator.Or, "ConstantVelocity", "ExperimentDataVelocity")]
     public bool ZeroVelocity;
 
-    [Label("一定速度"), DisableIf("ZeroVelocity")]
+    [Label("一定速度"), DisableIf(EConditionOperator.Or, "ZeroVelocity", "ExperimentDataVelocity")]
     public bool ConstantVelocity;
 
-    [Label("実験データ")]
-    public bool ExperimentData;
+    [Label("実験データ（操舵のみ）"), DisableIf(EConditionOperator.Or, "GamepadInput", "ExperimentDataVelocity")]
+    public bool ExperimentDataSteer;
 
-    [Label("入力（ON:ゲームパッド, Off:ハンコン）")]
+    [Label("実験データ（操舵，速度）"), DisableIf(EConditionOperator.Or, "GamepadInput", "ExperimentDataSteer")]
+    public bool ExperimentDataVelocity;
+
+    [Label("入力（ON:ゲームパッド, Off:ハンコン）"), DisableIf(EConditionOperator.Or, "ExperimentDataSteer", "ExperimentDataVelocity")]
     public bool GamepadInput;
 
     [Label("車体を表示（Car）"), DisableIf("DelayVehicle")]

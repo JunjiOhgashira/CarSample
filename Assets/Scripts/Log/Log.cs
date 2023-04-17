@@ -52,12 +52,14 @@ namespace Log
             DataToWrite[12] = master.vm.ToString();             // 12
             DataToWrite[13] = slave.vs.ToString();              // 13
             DataToWrite[14] = master.energy.ToString();         // 14
-            DataToWrite[15] = master.b.ToString();              // 14
+            DataToWrite[15] = master.b.ToString();              // 15
+            DataToWrite[16] = slave.Vs.ToString();              // 16
+            DataToWrite[17] = master.thetaError.ToString();              // 17
         }
 
         void Start()
         {
-            DataToWrite = new string[16]
+            DataToWrite = new string[18]
             {
                 "time",
                 "RTT",
@@ -74,7 +76,9 @@ namespace Log
                 "vm",
                 "vs",
                 "energy",
-                "b"
+                "b",
+                "velocity",
+                "thetaError"
             };
 
             delay_text = "RTT" + (parameter.delay * 2).ToString() + "ms";

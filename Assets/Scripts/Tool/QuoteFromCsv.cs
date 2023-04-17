@@ -21,6 +21,12 @@ public class QuoteFromCsv : MonoBehaviour
     [HideInInspector]
     public double HandleControllerAngle;
     [HideInInspector]
+    public int velocityIndex;
+    [HideInInspector]
+    public double Velocity; // t-T‚É‚¨‚¯‚é‘¬“x
+    [HideInInspector]
+    public double LowerLimitVelocity;
+    [HideInInspector]
     public float startTime;
     [HideInInspector]
     public float finishTime;
@@ -37,14 +43,19 @@ public class QuoteFromCsv : MonoBehaviour
             csvDatas.Add(line.Split(','));
         }
 
-        index       = 1;
-        timeIndex   = 0;
-        deltamIndex = 12;
-        startTime = 320;
-        finishTime = 370;
+        index           = 1;
+        timeIndex       = 0;
+        deltamIndex     = 12;
+        velocityIndex   = 4;
+        startTime = 55;
+        finishTime = 90;
 
-        //startTime   = 0;
-        //finishTime  = float.Parse(csvDatas[csvDatas.Count-1][timeIndex]);
+        //startTime = 0;
+        //finishTime = float.Parse(csvDatas[csvDatas.Count - 1][timeIndex]);
+
+        LowerLimitVelocity = 1.0 * 1000.0 / 3600.0;
+        //Velocity = double.Parse(csvDatas[index][velocityIndex]) > LowerLimitVelocity ? double.Parse(csvDatas[index][velocityIndex]) : LowerLimitVelocity;
+        Velocity = double.Parse(csvDatas[index][velocityIndex]);
     }
 
     void Update()
@@ -52,11 +63,14 @@ public class QuoteFromCsv : MonoBehaviour
         while (float.Parse(csvDatas[index][timeIndex]) < Time.time + startTime)
         {
             HandleControllerAngle = double.Parse(csvDatas[index][deltamIndex]);
+            //Velocity              = double.Parse(csvDatas[index][velocityIndex]) > LowerLimitVelocity ? double.Parse(csvDatas[index][velocityIndex]) : LowerLimitVelocity;
+            Velocity = double.Parse(csvDatas[index][velocityIndex]);
             index += (float.Parse(csvDatas[index][timeIndex]) < Time.time + startTime) ? 1 : 0;
         }
 
-        if (Time.time > finishTime - startTime && modeChange.ExperimentData)
+        if (Time.time > finishTime - startTime && (modeChange.ExperimentDataSteer || modeChange.ExperimentDataVelocity))
         {
+            Debug.Log(finishTime);
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6e69e9434f595448b52bcd07b08a50, type: 3}
   m_Name: CsvParam
   m_EditorClassIdentifier: 
-  quote: "\u901F\u5EA6\u3042\u308A"
+  quote: 2023_4_13_12_20_15_D_0.8_b_20km

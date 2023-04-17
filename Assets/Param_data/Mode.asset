@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Mode
   m_EditorClassIdentifier: 
   DelayVehicle: 1
-  ProposedMethod: 0
-  ConstantB: 0
+  ProposedMethod: 1
+  ConstantB: 1
   Mounted: 0
   ZeroVelocity: 0
   ConstantVelocity: 1
-  ExperimentData: 0
+  ExperimentDataSteer: 0
+  ExperimentDataVelocity: 0
   GamepadInput: 1
   CarOutline: 0
-  MasterOutline: 1
+  MasterOutline: 0
   SlaveOutline: 0

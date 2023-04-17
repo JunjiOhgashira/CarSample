@@ -383,6 +383,7 @@
 "Assets/Scripts/Vehicle/GetInput.cs"
 "Assets/Scripts/Vehicle/Master.cs"
 "Assets/Scripts/Vehicle/Slave.cs"
+"Assets/Scripts/Vehicle/WaveIntegral.cs"
 -langversion:9.0
 
 /deterministic

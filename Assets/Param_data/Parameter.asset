@@ -19,8 +19,8 @@ MonoBehaviour:
   l: 2.705
   lf: 1.3525
   lr: 1.3525
-  Kf: 15000
-  Kr: 15000
+  Kf: 50000
+  Kr: 50000
   length: 4.695
   width: 1.81
   height: 1.6
@@ -28,3 +28,4 @@ MonoBehaviour:
   ratio: 18
   accelMax: 2
   brakeMax: 2
+  LowerLimitVelocity: 1

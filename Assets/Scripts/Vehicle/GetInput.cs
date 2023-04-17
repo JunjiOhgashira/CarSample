@@ -43,7 +43,7 @@ namespace Vehicle
 
         void Update()
         {
-            if (modeChange.ExperimentData)
+            if (modeChange.ExperimentDataSteer || modeChange.ExperimentDataVelocity)
             {
                 HandleControllerAngle = quoteFromCsv.HandleControllerAngle;
             }
@@ -111,15 +111,15 @@ namespace Vehicle
 
             FrontWheelAngle = HandleControllerAngle / SteeringGearRatio;
 
-            if (Time.time > zero + peak + period + 50)
-            {
+//            if (Time.time > zero + peak + period + 50)
+//            {
 
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
-            }
+//#if UNITY_EDITOR
+//                UnityEditor.EditorApplication.isPlaying = false;
+//#else
+//    Application.Quit();
+//#endif
+//            }
         }
     }
 }

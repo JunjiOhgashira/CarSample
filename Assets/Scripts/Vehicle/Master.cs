@@ -30,12 +30,16 @@ namespace Vehicle
         public ShareParam shareParam;
         public ModeChange mode;
         public UnitAdjuster unitAdjuster;
+        public QuoteFromCsv quoteFromCsv;
 
         public Slave slave;
         public GetInput getInput;
+        public WaveIntegral waveIntegral;
 
         public List<MasterData> AllData = new List<MasterData>();
         public List<int> times = new List<int>();
+        public List<double> omegam_history = new List<double>();
+        public List<double> deltam_history = new List<double>();
 
         [HideInInspector]
         public double dt;
@@ -45,6 +49,8 @@ namespace Vehicle
         public int now;
         [HideInInspector]
         public int oneWayDelayIndex;
+        [HideInInspector]
+        public int roundTripDelayIndex;
 
         [HideInInspector]
         public double omegam;
@@ -56,7 +62,7 @@ namespace Vehicle
         public double pxm;
         [HideInInspector]
         public double pym;
-        [HideInInspector]
+        //[HideInInspector]
         public double Vm;
         [HideInInspector]
         public double deltas;
@@ -141,7 +147,9 @@ namespace Vehicle
         public double brakeMax;
 
         [HideInInspector]
-        public double omegamSum;
+        public double omegam_T;
+        [HideInInspector]
+        public double deltam_2T;
 
         [HideInInspector]
         public double tmp;
@@ -226,7 +234,7 @@ namespace Vehicle
 
                 noInputTime = 0;
 
-                omegamSum = 0;
+                omegam_T = 0;
 
                 ratio = parameter.ratio;
 
@@ -241,6 +249,10 @@ namespace Vehicle
                 //this.transform.localScale = new Vector3((float)wd, (float)hd, (float)ld);
 
                 oneWayDelayIndex = 0;
+                roundTripDelayIndex = 0;
+
+                omegam_history.Add(0);
+                deltam_history.Add(0);
 
                 MasterData d = new MasterData();
                 d.date = 0;
@@ -251,8 +263,8 @@ namespace Vehicle
                 d.pxm = 0;
                 d.pym = 0;
                 d.thetam = 0;
-                d.Vm = ConstantVelocity ? 0 : V0;
-                d.Vs = ConstantVelocity ? 0 : V0;
+                d.Vm = ConstantVelocity ? V : (mode.ExperimentDataVelocity ? quoteFromCsv.Velocity : V0);
+                d.Vs = ConstantVelocity ? V : (mode.ExperimentDataVelocity ? quoteFromCsv.Velocity : V0);
                 d.betas = 0;
                 d.b = b;
                 d.um = 0;
@@ -281,29 +293,31 @@ namespace Vehicle
             dt = Time.deltaTime;
             now = (int)(Time.time * 1000);
             oneWayDelayIndex = OneWayDelayData(now);
+            roundTripDelayIndex = RoundTripDelayData(now);
             tmp = Time.time;
+        }
+
+        int DelayData(int pastDate)
+        {
+            if (pastDate <= 0) return 0;
+            else
+            {
+                var min = times.Min(c => Math.Abs(c - pastDate));
+                var nearest = times.First(c => Math.Abs(c - pastDate) == min);
+                return times.IndexOf(nearest);
+            }
         }
 
         int OneWayDelayData(int now)
         {
             int pastDate = now - delay;
-            if (pastDate < 0) return 0;
-            else
-            {
-                int count = 0;
-                while (true)
-                {
-                    if (times.Contains(pastDate - count))
-                    {
-                        int index = times.IndexOf(pastDate - count);
-                        return index;
-                    }
-                    else
-                    {
-                        count++;
-                    }
-                }
-            }
+            return DelayData(pastDate);
+        }
+
+        int RoundTripDelayData(int now)
+        {
+            int pastDate = now - 2 * delay;
+            return DelayData(pastDate);
         }
 
         void OperationInput()
@@ -315,7 +329,12 @@ namespace Vehicle
 
         void VelocityMode()
         {
-            if (!ConstantVelocity)
+            if (mode.ExperimentDataVelocity)
+            {
+                Vm = quoteFromCsv.Velocity;
+                b = BSolver();
+            }
+            else if (!ConstantVelocity)
             {
                 double acceleration_value = (Vm > V0) ? (accel - brake - 0.15) * dt : (accel - brake + 0.15) * dt;
                 Vm += Vm < 1 * (1000.0 / 3600.0) ? 0 : acceleration_value;
@@ -349,9 +368,11 @@ namespace Vehicle
 
         void VideoPresentation()
         {
-            omegamSum += omegam - AllData[oneWayDelayIndex].omegam;
+            omegam_T = omegam_history.GetRange(oneWayDelayIndex, omegam_history.Count- oneWayDelayIndex).Sum();
+            deltam_2T = deltam_history.GetRange(roundTripDelayIndex, omegam_history.Count- roundTripDelayIndex).Sum();
             //thetam += omegam * dt;
-            thetam = slave.thetasPast + omegamSum * dt;
+            //thetam = slave.thetasPast + omegam_T * dt;
+            thetam = waveIntegral.thetam;
 
             pxm = slave.AllData[oneWayDelayIndex].pxs;
             pym = slave.AllData[oneWayDelayIndex].pys;
@@ -366,6 +387,8 @@ namespace Vehicle
         void UpdateValue()
         {
             times.Add(now);
+            omegam_history.Add(omegam);
+            deltam_history.Add(deltam);
 
             MasterData d = new MasterData();
             d.date = now;

@@ -53,4 +53,7 @@ public class Parameter : ScriptableObject
 
     [Label("ブレーキペダル最大値")]
     public double brakeMax;
+
+    [Label("速度下限値[km/h]")]
+    public double LowerLimitVelocity;
 }
