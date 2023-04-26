@@ -5,33 +5,22 @@ using System;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.UI;
 
-namespace UI
+namespace Car
 {
-    public class Velocity : MonoBehaviour
+    namespace UI
     {
-        public ModeChange modeChange;
-        public UnitAdjuster unitAdjuster;
-
-        public Vehicle.Master master;
-
-        public double V;
-
-        public GameObject velocity_object = null;
-
-        void Update()
+        public class Velocity : MonoBehaviour
         {
-            if (modeChange.ConstantVelocity)
-            {
-                V = unitAdjuster.V_km_h;
-            }
-            else
-            {
-                V = master.Vm;
-            }
+            public GameManager gm;
 
-            Text velocity_text = velocity_object.GetComponent<Text>();
+            public GameObject velocity_object = null;
 
-            velocity_text.text = Math.Round((float)V, 0, MidpointRounding.AwayFromZero).ToString() + "km/h";
+            void FixedUpdate()
+            {
+                Text velocity_text = velocity_object.GetComponent<Text>();
+
+                velocity_text.text = Math.Round((float)gm.velm, 0, MidpointRounding.AwayFromZero).ToString() + "km/h";
+            }
         }
     }
 }

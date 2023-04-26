@@ -5,20 +5,23 @@ using System;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.UI;
 
-namespace UI
+namespace Car
 {
-    public class VelocityGauge : MonoBehaviour
+    namespace UI
     {
-        public Vehicle.Master master;
-
-        void Update()
+        public class VelocityGauge : MonoBehaviour
         {
-            if (!master.ConstantVelocity)
+            public GameManager gm;
+
+            void FixedUpdate()
             {
-                Image gaugeCtrl = GetComponent<Image>();
-                gaugeCtrl.fillAmount = (float)master.Vm / (100f * (1000f / 3600f));
+                if (!gm.ConstantVelocity)
+                {
+                    Image gaugeCtrl = GetComponent<Image>();
+                    gaugeCtrl.fillAmount = (float)gm.velm / (100f * (1000f / 3600f));
+                }
             }
         }
-    }
 
+    }
 }

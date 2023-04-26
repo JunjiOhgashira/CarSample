@@ -4,20 +4,21 @@ using UnityEngine;
 using System;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.UI;
-using Vehicle;
 
-namespace UI
+namespace Car
 {
-    public class Delay : MonoBehaviour
+    namespace UI
     {
-        public Parameter parameter;
-
-        public GameObject delay_object = null;
-
-        void Update()
+        public class Delay : MonoBehaviour
         {
-            Text delay_text = delay_object.GetComponent<Text>();
-            delay_text.text = "RTT:" + (parameter.delay * 2).ToString() + "ms";
+            public GameManager gm;
+            public GameObject delay_object = null;
+
+            void FixedUpdate()
+            {
+                Text delay_text = delay_object.GetComponent<Text>();
+                delay_text.text = "RTT:" + (gm.delay * 2).ToString() + "ms";
+            }
         }
     }
 }

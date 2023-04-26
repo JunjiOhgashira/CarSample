@@ -6,25 +6,31 @@ using System;
 using System.Text;
 using UnityEngine.InputSystem;
 
-public class ScreenShotCapturer : MonoBehaviour
+namespace Car
 {
-    private void Update()
+    namespace Tool
     {
-        if (Keyboard.current.spaceKey.isPressed)
+        public class ScreenShotCapturer : MonoBehaviour
         {
-            DateTime dateTime = DateTime.Now;
-            CaptureScreenShot(Application.dataPath + @"\ScreenShots\"
-                            + dateTime.Year.ToString() + "_" 
-                            + dateTime.Month.ToString() + "_" 
-                            + dateTime.Day.ToString() + "_" 
-                            + dateTime.Hour.ToString() + "_" 
-                            + dateTime.Minute.ToString() + "_" 
-                            + dateTime.Second.ToString() + ".png");
-        }
-    }
+            private void FixedUpdate()
+            {
+                if (Keyboard.current.spaceKey.isPressed)
+                {
+                    DateTime dateTime = DateTime.Now;
+                    CaptureScreenShot(Application.dataPath + @"\ScreenShots\"
+                                    + dateTime.Year.ToString() + "_"
+                                    + dateTime.Month.ToString() + "_"
+                                    + dateTime.Day.ToString() + "_"
+                                    + dateTime.Hour.ToString() + "_"
+                                    + dateTime.Minute.ToString() + "_"
+                                    + dateTime.Second.ToString() + ".png");
+                }
+            }
 
-    private void CaptureScreenShot(string filePath)
-    {
-        ScreenCapture.CaptureScreenshot(filePath);
+            private void CaptureScreenShot(string filePath)
+            {
+                ScreenCapture.CaptureScreenshot(filePath);
+            }
+        }
     }
 }

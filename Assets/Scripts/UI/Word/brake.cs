@@ -5,24 +5,27 @@ using System;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine.UI;
 
-namespace UI
+namespace Car
 {
-    public class brake : MonoBehaviour
+    namespace UI
     {
-        public Vehicle.Master master;
-
-        public GameObject brake_object = null;
-
-        void Start()
+        public class brake : MonoBehaviour
         {
-        }
+            public GameManager gm;
 
-        void FixedUpdate()
-        {
-            if (!master.ConstantVelocity)
+            public GameObject brake_object = null;
+
+            void Start()
             {
-                Text accel_text = brake_object.GetComponent<Text>();
-                accel_text.text = "brake";
+            }
+
+            void FixedUpdate()
+            {
+                if (!gm.ConstantVelocity)
+                {
+                    Text accel_text = brake_object.GetComponent<Text>();
+                    accel_text.text = "brake";
+                }
             }
         }
     }

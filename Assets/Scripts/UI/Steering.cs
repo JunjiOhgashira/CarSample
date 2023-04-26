@@ -4,32 +4,30 @@ using UnityEngine;
 using System;
 using UnityStandardAssets.CrossPlatformInput;
 
-namespace UI
+namespace Car
 {
-    public class Steering : MonoBehaviour
+    namespace UI
     {
-        public Parameter parameter;
-
-        public Vehicle.GetInput getInput;
-
-        public double HandleControllerAngle;
-        Quaternion rot, rot_ini, rot_end;
-        Vector3 ini = new Vector3(0.0f, -1.0f, 1.0f);
-
-        void Start()
+        public class Steering : MonoBehaviour
         {
-            rot_ini = Quaternion.AngleAxis(303, Vector3.right);
+            public GameManager gm;
+
+            Quaternion rot, rot_ini, rot_end;
+            Vector3 ini = new Vector3(0.0f, -1.0f, 1.0f);
+
+            void Start()
+            {
+                rot_ini = Quaternion.AngleAxis(303, Vector3.right);
+            }
+
+            void FixedUpdate()
+            {
+                rot = Quaternion.AngleAxis(-(float)gm.HandleControllerAngle, ini);
+                gameObject.transform.localRotation = rot * rot_ini;
+
+                gameObject.transform.localPosition = new Vector3(0, 300, 0);
+            }
         }
 
-        void FixedUpdate()
-        {
-            HandleControllerAngle = getInput.HandleControllerAngle;
-
-            rot = Quaternion.AngleAxis(-(float)HandleControllerAngle, ini);
-            gameObject.transform.localRotation = rot * rot_ini;
-
-            gameObject.transform.localPosition = new Vector3(0, 300, 0);
-        }
     }
-
 }

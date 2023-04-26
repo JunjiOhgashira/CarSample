@@ -2,15 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FpsDisplay : MonoBehaviour
+namespace Car
 {
-
-    private float fps;
-
-    private void Update()
+    namespace Tool
     {
-        fps = 1f / Time.deltaTime;
-        //Debug.Log(fps);
-    }
+        public class FpsDisplay : MonoBehaviour
+        {
 
+            private float fps;
+
+            private void FixedUpdate()
+            {
+                fps = 1f / Time.deltaTime;
+                //Debug.Log(fps);
+            }
+
+        }
+    }
 }

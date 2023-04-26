@@ -46,7 +46,7 @@ public class Parameter : ScriptableObject
     public double V0;
 
     [Label("ステアリングギア比")]
-    public double ratio;
+    public double gearRatio;
 
     [Label("アクセルペダル最大値")]
     public double accelMax;
@@ -56,4 +56,7 @@ public class Parameter : ScriptableObject
 
     [Label("速度下限値[km/h]")]
     public double LowerLimitVelocity;
+
+    [Label("ハンコン最大角")]
+    public double HandleControllerAngleMax;
 }

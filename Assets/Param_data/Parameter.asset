@@ -25,7 +25,8 @@ MonoBehaviour:
   width: 1.81
   height: 1.6
   V0: 20
-  ratio: 18
+  gearRatio: 18
   accelMax: 2
   brakeMax: 2
   LowerLimitVelocity: 1
+  HandleControllerAngleMax: 450
