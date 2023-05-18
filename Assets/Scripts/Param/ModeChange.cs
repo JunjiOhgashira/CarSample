@@ -10,14 +10,14 @@ public class ModeChange : ScriptableObject
     [Label("’x‰„‚ ‚è"), OnValueChanged("OnValueChanged")]
     public bool DelayVehicle;
 
-    //[Label("”g•Ï”•ÏŠ·"), EnableIf("DelayVehicle"), OnValueChanged("OnValueChanged1")]
-    //public bool WaveVariableTransformation;
-
     [Label("”g•Ï”•ÏŠ·"), EnableIf("DelayVehicle"), OnValueChanged("OnValueChanged1")]
     public bool WaveVariableTransformation;
 
     [Label("”gÏ•ª"), EnableIf("WaveVariableTransformation"), OnValueChanged("OnValueChanged1")]
     public bool WaveIntegral;
+
+    [Label("”g’²®"), EnableIf("WaveVariableTransformation"), OnValueChanged("OnValueChanged1")]
+    public bool WaveAdjust;
 
     // camera type
     [Label("ƒJƒƒ‰‹“_iã‚©‚çj")]

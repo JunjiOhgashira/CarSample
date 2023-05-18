@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Linq;
 
 namespace Car
 {
@@ -11,40 +13,27 @@ namespace Car
             public GameManager gm;
 
             [HideInInspector]
-            public double thetas_T;
-            [HideInInspector]
-            public double thetam_2T;
-            [HideInInspector]
             public double deltam_integral;
-            [HideInInspector]
-            public double CI;   // 特性インピーダンス
-            [HideInInspector]
-            public double damper;
-
-            void Start()
-            {
-                CI = 0.5;
-                damper = 0.5;
-            }
-
-            void Update()
-            {
-                //if (waveIntegral)
-                //{
-                //    GetThetam();
-                //}
-            }
 
             void FixedUpdate()
             {
+                if (gm.WaveIntegral)
+                {
+                    Communication();
+                }
             }
 
-            void GetThetam()
+            void Communication()
             {
-                //thetas_T = all[oneWayDelayIndex].thetas;
-                //thetam_2T = all[roundTripDelayIndex].thetam;
-                //deltam_integral = master.deltam_2T;
-                //thetam = thetas_T + (thetas_T - thetam_2T) * damper + CI * deltam_integral * dt;
+                // master
+                gm.epsilonm += gm.deltam * gm.dt;
+                gm.Vm = gm.SFI * gm.all[gm.oneWayDelayIndex].Vs;
+                gm.Um = (gm.CII * gm.epsilonm + gm.thetam) / Math.Sqrt(2 * gm.CII);
+
+                // slave
+                gm.Us = gm.SFI * gm.all[gm.oneWayDelayIndex].Um;
+                gm.epsilons = (Math.Sqrt(2 * gm.CII) * gm.Us - gm.thetas) / gm.CII;
+                gm.Vs = (gm.CII * gm.epsilons - gm.thetas) / Math.Sqrt(2 * gm.CII);
             }
         }
     }

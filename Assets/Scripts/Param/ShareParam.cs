@@ -7,8 +7,14 @@ using NaughtyAttributes;
 public class ShareParam : ScriptableObject
 {
     [Label("特性インピーダンス[km/h]")]
-    public double b;
+    public double CI;
 
-    [Label("通信路のダンピング")]
-    public double D;
+    [Label("スケーリング係数")]
+    public double SF;
+
+    [Label("特性インピーダンス（波積分）")]
+    public double CII;
+
+    [Label("スケーリング係数（波積分）")]
+    public double SFI;
 }

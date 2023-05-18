@@ -11,21 +11,28 @@ namespace Car
         public int date { get; set; }
         public double deltam { get; set; }
         public double deltas { get; set; }
-        public double beta { get; set; }
         public double omegam { get; set; }
         public double omegas { get; set; }
+        public double epsilonm { get; set; }
+        public double epsilons { get; set; }
+        public double thetam { get; set; }
+        public double thetas { get; set; }
         public double pxm { get; set; }
         public double pxs { get; set; }
         public double pym { get; set; }
         public double pys { get; set; }
-        public double thetam { get; set; }
-        public double thetas { get; set; }
         public double velm { get; set; }
         public double vels { get; set; }
         public double um { get; set; }
         public double us { get; set; }
         public double vm { get; set; }
         public double vs { get; set; }
+        public double hat_vm { get; set; }
+        public double hat_vs { get; set; }
+        public double Um { get; set; }
+        public double Us { get; set; }
+        public double Vm { get; set; }
+        public double Vs { get; set; }
     }
 
     public class GameManager : MonoBehaviour
@@ -34,6 +41,8 @@ namespace Car
 
         public List<Variable> all = new List<Variable>();
         public List<int> times = new List<int>();
+        public List<double> deltam_sum = new List<double>();
+        public List<double> vs_sum = new List<double>();
 
         public Parameter parameter;
         public ShareParam shareParam;
@@ -44,6 +53,7 @@ namespace Car
         public Input input;
         public Vehicle.GetVelocity getVelocity;
         public Vehicle.WaveIntegral waveIntegral;
+        public Vehicle.WaveAdjust waveAdjust;
 
         [HideInInspector]
         public bool DelayVehicle;
@@ -51,6 +61,8 @@ namespace Car
         public bool WaveVariableTransformation;
         [HideInInspector]
         public bool WaveIntegral;
+        [HideInInspector]
+        public bool WaveAdjust;
         [HideInInspector]
         public bool LookDown;
         [HideInInspector]
@@ -84,6 +96,14 @@ namespace Car
         [HideInInspector]
         public double omegas;
         [HideInInspector]
+        public double epsilonm;
+        [HideInInspector]
+        public double epsilons;
+        [HideInInspector]
+        public double thetam;
+        [HideInInspector]
+        public double thetas;
+        [HideInInspector]
         public double pxm;
         [HideInInspector]
         public double pxs;
@@ -96,10 +116,6 @@ namespace Car
         [HideInInspector]
         public Vector3 slavePosition;
         [HideInInspector]
-        public double thetam;
-        [HideInInspector]
-        public double thetas;
-        [HideInInspector]
         public Vector3 masterAzimuth;
         [HideInInspector]
         public Vector3 slaveAzimuth;
@@ -108,7 +124,9 @@ namespace Car
         [HideInInspector]
         public double vels;
         [HideInInspector]
-        public double b;
+        public double CI;   // 特性インピーダンス
+        [HideInInspector]
+        public double CII;
         [HideInInspector]
         public double um;
         [HideInInspector]
@@ -117,6 +135,18 @@ namespace Car
         public double vm;
         [HideInInspector]
         public double vs;
+        [HideInInspector]
+        public double hat_vs;
+        [HideInInspector]
+        public double hat_vm;
+        [HideInInspector]
+        public double Um;
+        [HideInInspector]
+        public double Us;
+        [HideInInspector]
+        public double Vm;
+        [HideInInspector]
+        public double Vs;
 
         [HideInInspector]
         public double M;
@@ -171,7 +201,9 @@ namespace Car
         [HideInInspector]
         public double vel0;
         [HideInInspector]
-        public double D;
+        public double SF;   // スケーリング係数
+        [HideInInspector]
+        public double SFI;
         [HideInInspector]
         public double power;
         [HideInInspector]
@@ -184,6 +216,8 @@ namespace Car
         public double FrontWheelAngle;
         [HideInInspector]
         public double HandleControllerAngleMax;
+        [HideInInspector]
+        public double lamda;
 
         private void Awake()
         {
@@ -203,6 +237,7 @@ namespace Car
             DelayVehicle = mode.DelayVehicle;
             WaveVariableTransformation = mode.WaveVariableTransformation;
             WaveIntegral = mode.WaveIntegral;
+            WaveAdjust = mode.WaveAdjust;
             LookDown = mode.LookDown;
             ConstantVelocity = mode.ConstantVelocity;
             Stop = mode.Stop;
@@ -238,11 +273,15 @@ namespace Car
             accelMax = parameter.accelMax;
             brakeMax = parameter.brakeMax;
             vel0 = unitAdjuster.V0_m_s;
-            D = shareParam.D;
-            b = BSolver();
+            SF = shareParam.SF;
+            SFI = shareParam.SFI;
+            CI = CISolver();
+            CII = shareParam.CII;
             energy = 0;
             lowerLimitVelocity = unitAdjuster.LowerLimitVelocity_m_s;
             HandleControllerAngleMax = parameter.HandleControllerAngleMax;
+            lamda = parameter.lamda;
+            UpdateValue();
         }
 
         void FixedUpdate()
@@ -285,26 +324,35 @@ namespace Car
         void UpdateValue()
         {
             times.Add(now);
+            deltam_sum.Add(deltam);
+            vs_sum.Add(vs);
 
             Variable d = new Variable();
             d.date = now;
             d.deltam = deltam;
             d.deltas = deltas;
-            d.beta = beta;
             d.omegam = omegam;
             d.omegas = omegas;
+            d.epsilonm = epsilonm;
+            d.epsilons = epsilons;
+            d.thetam = thetam;
+            d.thetas = thetas;
             d.pxm = pxm;
             d.pxs = pxs;
             d.pym = pym;
             d.pys = pys;
-            d.thetam = thetam;
-            d.thetas = thetas;
             d.velm = velm;
             d.vels = vels;
             d.um = um;
-            d.vm = vm;
+            d.us = us;
             d.vm = vm;
             d.vs = vs;
+            d.hat_vs = hat_vs;
+            d.hat_vm = hat_vm;
+            d.Um = um;
+            d.Us = Us;
+            d.Vm = Vm;
+            d.Vs = Vs;
 
             all.Add(d);
 
@@ -314,6 +362,8 @@ namespace Car
                 {
                     all.RemoveAt(0);
                     times.RemoveAt(0);
+                    deltam_sum.RemoveAt(0);
+                    vs_sum.RemoveAt(0);
                 }
                 else
                 {
@@ -322,7 +372,7 @@ namespace Car
             }
         }
 
-        public double BSolver()
+        public double CISolver()
         {
             double velRef = unitAdjuster.Vb_m_s;
             double sf = (M * velRef * velRef * (lf * Kf - lr * Kr)) / (2f * (lf + lr) * (lf + lr) * Kf * Kr);

@@ -59,4 +59,7 @@ public class Parameter : ScriptableObject
 
     [Label("ƒnƒ“ƒRƒ“Å‘åŠp")]
     public double HandleControllerAngleMax;
+
+    [Label("”gM†’²®‘Ñˆæ•")]
+    public double lamda;
 }

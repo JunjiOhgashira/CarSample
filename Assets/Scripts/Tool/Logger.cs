@@ -18,6 +18,9 @@ namespace Car
             public Parameter parameter;
             public ModeChange modeChange;
             public Vehicle.Input input;
+            public Vehicle.WaveNormal waveNormal;
+            public Vehicle.WaveAdjust waveAdjust;
+            public Vehicle.WaveAdjustSecond waveAdjustSecond;
 
             public string delay_text;
             public string method_text;
@@ -51,33 +54,35 @@ namespace Car
                 DataToWrite[12] = gm.vm.ToString();
                 DataToWrite[13] = gm.vs.ToString();
                 DataToWrite[14] = gm.energy.ToString();
-                DataToWrite[15] = gm.b.ToString();
+                DataToWrite[15] = gm.CI.ToString();
                 DataToWrite[16] = gm.vels.ToString();
-                DataToWrite[17] = (gm.thetam - gm.thetas).ToString();
+                DataToWrite[17] = gm.hat_vm.ToString();
+                DataToWrite[18] = waveAdjustSecond.delta_vm.ToString();
             }
 
             void Start()
             {
-                DataToWrite = new string[18]
+                DataToWrite = new string[19]
                 {
-                "time",
-                "RTT",
-                "deltam",
-                "deltas",
-                "omegam",
-                "omegas",
-                "thetam",
-                "thetas",
-                "pxs",
-                "pys",
-                "um",
-                "us",
-                "vm",
-                "vs",
-                "energy",
-                "b",
-                "velocity",
-                "thetaError"
+                    "time",
+                    "RTT",
+                    "deltam",
+                    "deltas",
+                    "omegam",
+                    "omegas",
+                    "thetam",
+                    "thetas",
+                    "pxs",
+                    "pys",
+                    "um",
+                    "us",
+                    "vm",
+                    "vs",
+                    "energy",
+                    "b",
+                    "velocity",
+                    "hat_vm",
+                    "delta_vm"
                 };
 
                 delay_text = "RTT" + (parameter.delay * 2).ToString() + "ms";

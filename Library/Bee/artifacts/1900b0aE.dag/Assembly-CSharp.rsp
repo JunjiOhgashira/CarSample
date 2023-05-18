@@ -384,6 +384,9 @@
 "Assets/Scripts/Vehicle/Input.cs"
 "Assets/Scripts/Vehicle/Master.cs"
 "Assets/Scripts/Vehicle/Slave.cs"
+"Assets/Scripts/Vehicle/Vehicle.cs"
+"Assets/Scripts/Vehicle/WaveAdjust.cs"
+"Assets/Scripts/Vehicle/WaveAdjustSecond.cs"
 "Assets/Scripts/Vehicle/WaveIntegral.cs"
 "Assets/Scripts/Vehicle/WaveNormal.cs"
 -langversion:9.0
