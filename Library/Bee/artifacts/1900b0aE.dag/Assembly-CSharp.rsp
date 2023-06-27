@@ -382,6 +382,7 @@
 "Assets/Scripts/Vehicle/GameManager.cs"
 "Assets/Scripts/Vehicle/GetVelocity.cs"
 "Assets/Scripts/Vehicle/Input.cs"
+"Assets/Scripts/Vehicle/LPF.cs"
 "Assets/Scripts/Vehicle/Master.cs"
 "Assets/Scripts/Vehicle/Slave.cs"
 "Assets/Scripts/Vehicle/Vehicle.cs"

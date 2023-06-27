@@ -22,8 +22,8 @@ namespace Car
             {
                 t = 0;
                 amp = gm.HandleControllerAngleMax;
-                period = 3;
-                constantTime = 10.3;
+                period = 1;
+                constantTime = 10;
             }
 
             void FixedUpdate()
@@ -43,7 +43,7 @@ namespace Car
                     gm.brake = ac < 0 ? 0 : ac;
                 }
 
-                else
+                else if (gm.HandleController)
                 {
                     if (!LogitechGSDK.LogiIsPlaying(0, LogitechGSDK.LOGI_FORCE_SPRING))
                     {
@@ -59,37 +59,86 @@ namespace Car
                     }
                 }
 
-                //if (UnityEngine.Input.GetKey(KeyCode.RightArrow))
-                //{
+                double sign = 0.0;
 
-                //}
-
-                var current = Gamepad.current;
-
-                if (current.buttonEast.isPressed)
+                if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
                 {
+                    if (Keyboard.current.rightArrowKey.isPressed)
+                    {
+                        Debug.Log("right");
+                        sign = 1.0;
+                    }
+                    if (Keyboard.current.leftArrowKey.isPressed)
+                    {
+                        Debug.Log("left");
+                        sign = -1.0;
+                    }
+
                     if (t < period / 4)
                     {
-                        Debug.Log("a");
-                        gm.HandleControllerAngle = amp * Math.Sin(2 * Math.PI * t / period);
+                        gm.HandleControllerAngle = sign * amp * Math.Sin(2 * Math.PI * t / period);
                     }
                     else if (t < period / 4 + constantTime)
                     {
-                        Debug.Log("b");
-                        gm.HandleControllerAngle = amp;
+                        gm.HandleControllerAngle = sign * amp;
                     }
-                    else if(t < period / 2 + constantTime)
+                    else if (t < period / 2 + constantTime)
                     {
-                        Debug.Log("c");
-                        gm.HandleControllerAngle = amp * Math.Sin(2 * Math.PI * (t - constantTime) / period);
+                        gm.HandleControllerAngle = sign * amp * Math.Sin(2 * Math.PI * (t - constantTime) / period);
                     }
-                    else
-                    {
-                        Debug.Log("d");
-                        gm.HandleControllerAngle = 0;
-                    }
+
                     t += Time.deltaTime;
                 }
+                else
+                {
+                    Debug.Log("a");
+                    t = 0.0;
+                    gm.HandleControllerAngle -= 3 * gm.HandleControllerAngle * gm.dt;
+                }
+
+                if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+                {
+                    if (Keyboard.current.upArrowKey.isPressed)
+                    {
+                        gm.accel = gm.accelMax;
+                    }
+                    if (Keyboard.current.downArrowKey.isPressed)
+                    {
+                        gm.brake = gm.brakeMax;
+                    }
+                }
+                else
+                {
+                    gm.accel = 0.0;
+                    gm.brake = 0.0;
+                }
+
+                //var current = Gamepad.current;
+
+                //if (current.buttonEast.isPressed)
+                //{
+                //    if (t < period / 4)
+                //    {
+                //        Debug.Log("a");
+                //        gm.HandleControllerAngle = amp * Math.Sin(2 * Math.PI * t / period);
+                //    }
+                //    else if (t < period / 4 + constantTime)
+                //    {
+                //        Debug.Log("b");
+                //        gm.HandleControllerAngle = amp;
+                //    }
+                //    else if(t < period / 2 + constantTime)
+                //    {
+                //        Debug.Log("c");
+                //        gm.HandleControllerAngle = amp * Math.Sin(2 * Math.PI * (t - constantTime) / period);
+                //    }
+                //    else
+                //    {
+                //        Debug.Log("d");
+                //        gm.HandleControllerAngle = 0;
+                //    }
+                //    t += Time.deltaTime;
+                //}
 
                 gm.FrontWheelAngle = gm.HandleControllerAngle / gm.gearRatio;
             }

@@ -34,8 +34,11 @@ public class ModeChange : ScriptableObject
     [Label("実験データ"), DisableIf("GamepadInput")]
     public bool ExperimentData;
 
-    [Label("入力（ON:ゲームパッド, Off:ハンコン）"), DisableIf("ExperimentData")]
+    [Label("入力（ON:ゲームパッド）"), DisableIf("ExperimentData")]
     public bool GamepadInput;
+
+    [Label("入力（ON:ハンコン）"), DisableIf("ExperimentData")]
+    public bool HandleController;
 
     private void OnValueChanged()
     {

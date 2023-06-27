@@ -56,7 +56,7 @@ namespace Car
                 DataToWrite[14] = gm.energy.ToString();
                 DataToWrite[15] = gm.CI.ToString();
                 DataToWrite[16] = gm.vels.ToString();
-                DataToWrite[17] = gm.hat_vm.ToString();
+                DataToWrite[17] = waveNormal.vm.ToString();
                 DataToWrite[18] = waveAdjustSecond.delta_vm.ToString();
             }
 

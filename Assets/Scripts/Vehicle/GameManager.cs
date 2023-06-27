@@ -73,6 +73,8 @@ namespace Car
         public bool ExperimentData;
         [HideInInspector]
         public bool GamepadInput;
+        [HideInInspector]
+        public bool HandleController;
 
         [HideInInspector]
         public double dt;
@@ -243,6 +245,7 @@ namespace Car
             Stop = mode.Stop;
             ExperimentData = mode.ExperimentData;
             GamepadInput = mode.GamepadInput;
+            HandleController = mode.HandleController;
 
             delay = parameter.delay;
             oneWayDelayIndex = 0;

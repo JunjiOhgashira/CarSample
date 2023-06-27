@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ShareParam
   m_EditorClassIdentifier: 
   CI: 20
-  SF: 0.95
+  SF: 0.9
   CII: 10
-  SFI: 0.1
+  SFI: 10

@@ -28,6 +28,14 @@ namespace Car
                     {
                         gm.velm += (gm.accel - gm.brake) * gm.dt;
                     }
+                    if (gm.velm > gm.vel0)
+                    {
+                        gm.velm -= 0.3 * gm.dt;
+                    }
+                    else
+                    {
+                        gm.velm += 0.3 * gm.dt;
+                    }
                 }
             }
         }
