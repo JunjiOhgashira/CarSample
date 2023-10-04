@@ -10,29 +10,14 @@ namespace Car
         {
             public GameManager gm;
 
-            private double previous_omegam = 0.0;
-            private double current_omegam = 0.0;
-            private double difference;
-            private double threshold = 0.1;
-            private double gain = 0.1;
+            double T = 0.2;
 
-            void FixedUpdate()
+            public double Filter(double pre_input, double cur_input, double pre_output)
             {
-                current_omegam = gm.vm;
-                difference = Mathf.Abs((float)(current_omegam - previous_omegam));
+                //double cur_output = (2 * T - gm.dt) / (2 * T + gm.dt) * pre_output + gm.dt / (2 * T + gm.dt) * (cur_input + pre_input);
 
-                if (difference > threshold)
-                {
-                    Debug.Log("a");
-                    //current_omegam *= 0.0;
-                }
-                else
-                {
-                    Debug.Log("b");
-                }
-
-                previous_omegam = current_omegam;
-                gm.vm = current_omegam;
+                double cur_output = pre_output + (-pre_output / T + pre_input / T) * gm.dt;
+                return cur_output;
             }
         }
     }

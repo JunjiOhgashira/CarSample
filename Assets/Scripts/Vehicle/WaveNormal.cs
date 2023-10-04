@@ -12,23 +12,23 @@ namespace Car
         {
             public GameManager gm;
 
-            public WaveAdjust waveAdjust;
-            public WaveAdjustSecond waveAdjustSecond;
+            public LPF lPF;
 
-            public double pre_us;
-            public double pre_vm;
-            public double vm;
+            double vm_cur_output;
+            double vm_pre_output;
+            double vm_cur_input;
+            double vm_pre_input;
+
+            double us_cur_output;
+            double us_pre_output;
+            double us_cur_input;
+            double us_pre_input;
 
             void FixedUpdate()
             {
                 if (gm.WaveVariableTransformation)
                 {
                     Communication();
-
-                    if (gm.WaveAdjust)
-                    {
-                        waveAdjustSecond.Communication();
-                    }
                 }
             }
 
@@ -41,29 +41,37 @@ namespace Car
 
             void MasterCommunication()
             {
-                if (gm.waveAdjust)
+                if (gm.WaveFilter)
                 {
-                    gm.hat_vm = gm.SF * gm.all[gm.oneWayDelayIndex].vs;
+                    vm_cur_input = gm.all[gm.oneWayDelayIndex].vs;
+                    vm_cur_output = lPF.Filter(vm_pre_input, vm_cur_input, vm_pre_output);
+                    vm_pre_input = vm_cur_input;
+                    vm_pre_output = vm_cur_output;
+                    gm.vm = vm_cur_output;
                 }
                 else
                 {
                     gm.vm = gm.SF * gm.all[gm.oneWayDelayIndex].vs;
-                    //double vm_dif = (vm - pre_vm) / gm.dt;
-                    ////gm.vm = vm * 1 / (1 + Math.Pow(10000000000000000000 * vm_dif, 2));
-                    //gm.vm = vm - 1 * vm_dif * gm.dt;
-                    //pre_us = gm.us;
                 }
+
                 gm.omegam = gm.CI * gm.deltam - Math.Sqrt(2 * gm.CI) * gm.vm;
                 gm.um = (gm.CI * gm.deltam + gm.omegam) / Math.Sqrt(2 * gm.CI);
             }
 
             void SlaveCommunication()
             {
-                gm.us = gm.SF * gm.all[gm.oneWayDelayIndex].um;
-
-                //double us_dif = (gm.us - pre_us) / gm.dt;
-                //gm.us *= 1 / (1 + Math.Pow(0.0008 * us_dif, 2));
-                //pre_us = gm.us;
+                if (gm.WaveFilter)
+                {
+                    us_cur_input = gm.SF * gm.all[gm.oneWayDelayIndex].um;
+                    us_cur_output = lPF.Filter(us_pre_input, us_cur_input, us_pre_output);
+                    us_pre_input = us_cur_input;
+                    us_pre_output = us_cur_output;
+                    gm.us = us_cur_output;
+                }
+                else
+                {
+                    gm.us = gm.SF * gm.all[gm.oneWayDelayIndex].um;
+                }
 
                 gm.deltas = (Math.Sqrt(2 * gm.CI) * gm.us - gm.omegas) / gm.CI;
                 gm.vs = gm.us - Math.Sqrt(2 / gm.CI) * gm.omegas;

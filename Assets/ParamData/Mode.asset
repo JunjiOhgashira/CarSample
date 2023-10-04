@@ -22,3 +22,5 @@ MonoBehaviour:
   ExperimentData: 0
   GamepadInput: 0
   HandleController: 0
+  WaveFilter: 1
+  SensorFilter: 0

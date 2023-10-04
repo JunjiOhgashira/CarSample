@@ -75,6 +75,10 @@ namespace Car
         public bool GamepadInput;
         [HideInInspector]
         public bool HandleController;
+        [HideInInspector]
+        public bool WaveFilter;
+        [HideInInspector]
+        public bool SensorFilter;
 
         [HideInInspector]
         public double dt;
@@ -246,6 +250,8 @@ namespace Car
             ExperimentData = mode.ExperimentData;
             GamepadInput = mode.GamepadInput;
             HandleController = mode.HandleController;
+            WaveFilter = mode.WaveFilter;
+            SensorFilter = mode.SensorFilter;
 
             delay = parameter.delay;
             oneWayDelayIndex = 0;
@@ -291,6 +297,9 @@ namespace Car
         {
             GetTimeInformation();
             UpdateValue();
+
+            Debug.Log(gm.A[1, 0]);
+            //Debug.Log(gm.thetam - gm.thetas);
         }
 
         void GetTimeInformation()

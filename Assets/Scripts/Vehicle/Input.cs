@@ -14,6 +14,7 @@ namespace Car
             public GameManager gm;
 
             public double t;
+            public double step;
             public double period;
             public double constantTime;
             public double amp;
@@ -21,9 +22,10 @@ namespace Car
             private void Start()
             {
                 t = 0;
+                step = 0.5;
                 amp = gm.HandleControllerAngleMax;
                 period = 1;
-                constantTime = 10;
+                constantTime = 100;
             }
 
             void FixedUpdate()
@@ -65,33 +67,39 @@ namespace Car
                 {
                     if (Keyboard.current.rightArrowKey.isPressed)
                     {
-                        Debug.Log("right");
                         sign = 1.0;
                     }
                     if (Keyboard.current.leftArrowKey.isPressed)
                     {
-                        Debug.Log("left");
                         sign = -1.0;
                     }
 
-                    if (t < period / 4)
+                    if (t < period / 2)
                     {
-                        gm.HandleControllerAngle = sign * amp * Math.Sin(2 * Math.PI * t / period);
-                    }
-                    else if (t < period / 4 + constantTime)
-                    {
-                        gm.HandleControllerAngle = sign * amp;
+                        gm.HandleControllerAngle = sign * amp / 2 * (Math.Sin(2 * Math.PI * (t - period / 4) / period) + 1);
                     }
                     else if (t < period / 2 + constantTime)
                     {
-                        gm.HandleControllerAngle = sign * amp * Math.Sin(2 * Math.PI * (t - constantTime) / period);
+                        gm.HandleControllerAngle = sign * amp;
                     }
+                    else if (t < period + constantTime)
+                    {
+                        gm.HandleControllerAngle = sign * amp / 2 * (Math.Sin(2 * Math.PI * (t - (constantTime + period / 4)) / period) + 1);
+                    }
+
+                    //if(t > 0 && t < step)
+                    //{
+                    //    gm.HandleControllerAngle = sign * amp * t / step;
+                    //}
+                    //else if(t > step)
+                    //{
+                    //    gm.HandleControllerAngle = sign * amp;
+                    //}
 
                     t += Time.deltaTime;
                 }
                 else
                 {
-                    Debug.Log("a");
                     t = 0.0;
                     gm.HandleControllerAngle -= 3 * gm.HandleControllerAngle * gm.dt;
                 }

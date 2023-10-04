@@ -40,6 +40,12 @@ public class ModeChange : ScriptableObject
     [Label("入力（ON:ハンコン）"), DisableIf("ExperimentData")]
     public bool HandleController;
 
+    [Label("波変数フィルタ")]
+    public bool WaveFilter;
+
+    [Label("センサ値フィルタ")]
+    public bool SensorFilter;
+
     private void OnValueChanged()
     {
         if (DelayVehicle == false)

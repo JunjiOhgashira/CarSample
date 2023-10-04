@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 namespace Car
 {
@@ -11,6 +12,17 @@ namespace Car
         public class Vehicle : MonoBehaviour
         {
             public GameManager gm;
+            public LPF lPF;
+
+            double deltam_cur_output;
+            double deltam_pre_output;
+            double deltam_cur_input;
+            double deltam_pre_input;
+
+            double omegas_cur_output;
+            double omegas_pre_output;
+            double omegas_cur_input;
+            double omegas_pre_input;
 
             void FixedUpdate()
             {
@@ -21,7 +33,18 @@ namespace Car
 
             void OperationInput()
             {
-                gm.deltam = gm.FrontWheelAngle;
+                if (gm.SensorFilter)
+                {
+                    deltam_cur_input = gm.FrontWheelAngle;
+                    deltam_cur_output = lPF.Filter(deltam_pre_input, deltam_cur_input, deltam_pre_output);
+                    deltam_pre_input = deltam_cur_input;
+                    deltam_pre_output = deltam_cur_output;
+                    gm.deltam = deltam_cur_output;
+                }
+                else
+                {
+                    gm.deltam = gm.FrontWheelAngle;
+                }
             }
 
             void VehicleModel()
@@ -30,8 +53,20 @@ namespace Car
                 {
                     gm.A = new double[,] { { -gm.a11 / gm.vels, -1 - gm.a12 / (gm.vels * gm.vels) }, { -gm.a21, -gm.a22 / gm.vels } };
                     gm.B = new double[,] { { gm.b1 / gm.vels }, { gm.b2 } };
-                    gm.beta += (gm.A[0, 0] * gm.beta + gm.A[0, 1] * gm.omegas + gm.B[0, 0] * gm.deltas / gm.SF) * gm.dt;
-                    gm.omegas += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * gm.omegas + gm.B[1, 0] * gm.deltas / gm.SF) * gm.dt;
+                    gm.beta += (gm.A[0, 0] * gm.beta + gm.A[0, 1] * omegas_pre_input + gm.B[0, 0] * gm.deltas) * gm.dt;
+
+                    if (gm.SensorFilter)
+                    {
+                        omegas_cur_input += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * omegas_pre_input + gm.B[1, 0] * gm.deltas) * gm.dt;
+                        omegas_cur_output = lPF.Filter(omegas_pre_input, omegas_cur_input, omegas_pre_output);
+                        omegas_pre_input = omegas_cur_input;
+                        omegas_pre_output = omegas_cur_output;
+                        gm.omegas = omegas_cur_output;
+                    }
+                    else
+                    {
+                        gm.omegas += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * gm.omegas + gm.B[1, 0] * gm.deltas) * gm.dt;
+                    }
                 }
             }
 

@@ -56,13 +56,11 @@ namespace Car
                 DataToWrite[14] = gm.energy.ToString();
                 DataToWrite[15] = gm.CI.ToString();
                 DataToWrite[16] = gm.vels.ToString();
-                DataToWrite[17] = waveNormal.vm.ToString();
-                DataToWrite[18] = waveAdjustSecond.delta_vm.ToString();
             }
 
             void Start()
             {
-                DataToWrite = new string[19]
+                DataToWrite = new string[17]
                 {
                     "time",
                     "RTT",
@@ -80,9 +78,7 @@ namespace Car
                     "vs",
                     "energy",
                     "b",
-                    "velocity",
-                    "hat_vm",
-                    "delta_vm"
+                    "velocity"
                 };
 
                 delay_text = "RTT" + (parameter.delay * 2).ToString() + "ms";

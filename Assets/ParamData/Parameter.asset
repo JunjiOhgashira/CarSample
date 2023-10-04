@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c3438eea30ac548b87952c4ea9617c, type: 3}
   m_Name: Parameter
   m_EditorClassIdentifier: 
-  delay: 300
+  delay: 250
   M: 2010
   I: 4295
-  V: 20
+  V: 10
   l: 2.705
   lf: 1.3525
   lr: 1.3525
@@ -29,5 +29,5 @@ MonoBehaviour:
   accelMax: 2
   brakeMax: 2
   LowerLimitVelocity: 1
-  HandleControllerAngleMax: 250
+  HandleControllerAngleMax: 90
   lamda: 0.1
