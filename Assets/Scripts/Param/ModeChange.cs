@@ -13,12 +13,6 @@ public class ModeChange : ScriptableObject
     [Label("波変数変換"), EnableIf("DelayVehicle"), OnValueChanged("OnValueChanged1")]
     public bool WaveVariableTransformation;
 
-    [Label("波積分"), EnableIf("WaveVariableTransformation"), OnValueChanged("OnValueChanged1")]
-    public bool WaveIntegral;
-
-    [Label("波調整"), EnableIf("WaveVariableTransformation"), OnValueChanged("OnValueChanged1")]
-    public bool WaveAdjust;
-
     // camera type
     [Label("カメラ視点（上から）")]
     public bool LookDown;
@@ -43,23 +37,11 @@ public class ModeChange : ScriptableObject
     [Label("波変数フィルタ")]
     public bool WaveFilter;
 
-    [Label("センサ値フィルタ")]
-    public bool SensorFilter;
-
     private void OnValueChanged()
     {
         if (DelayVehicle == false)
         {
             WaveVariableTransformation = false;
-            WaveIntegral = false;
-        }
-    }
-
-    private void OnValueChanged1()
-    {
-        if (WaveIntegral == true)
-        {
-            WaveVariableTransformation = true;
         }
     }
 

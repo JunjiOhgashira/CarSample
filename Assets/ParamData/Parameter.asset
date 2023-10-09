@@ -30,4 +30,4 @@ MonoBehaviour:
   brakeMax: 2
   LowerLimitVelocity: 1
   HandleControllerAngleMax: 90
-  lamda: 0.1
+  FilterTimeConstant: 0.2

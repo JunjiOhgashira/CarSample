@@ -363,7 +363,6 @@
 "Assets/Scripts/Param/ModeChange.cs"
 "Assets/Scripts/Param/Parameter.cs"
 "Assets/Scripts/Param/ShareParam.cs"
-"Assets/Scripts/Tool/FpsDisplay.cs"
 "Assets/Scripts/Tool/Logger.cs"
 "Assets/Scripts/Tool/QuoteFromCsv.cs"
 "Assets/Scripts/Tool/RoadScript.cs"
@@ -378,7 +377,6 @@
 "Assets/Scripts/UI/Word/Delay.cs"
 "Assets/Scripts/UI/Word/Velocity.cs"
 "Assets/Scripts/Vehicle/Camera.cs"
-"Assets/Scripts/Vehicle/EnergyReserver.cs"
 "Assets/Scripts/Vehicle/GameManager.cs"
 "Assets/Scripts/Vehicle/GetVelocity.cs"
 "Assets/Scripts/Vehicle/Input.cs"
@@ -386,9 +384,6 @@
 "Assets/Scripts/Vehicle/Master.cs"
 "Assets/Scripts/Vehicle/Slave.cs"
 "Assets/Scripts/Vehicle/Vehicle.cs"
-"Assets/Scripts/Vehicle/WaveAdjust.cs"
-"Assets/Scripts/Vehicle/WaveAdjustSecond.cs"
-"Assets/Scripts/Vehicle/WaveIntegral.cs"
 "Assets/Scripts/Vehicle/WaveNormal.cs"
 -langversion:9.0
 

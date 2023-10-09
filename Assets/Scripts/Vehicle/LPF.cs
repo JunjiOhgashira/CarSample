@@ -10,13 +10,9 @@ namespace Car
         {
             public GameManager gm;
 
-            double T = 0.2;
-
             public double Filter(double pre_input, double cur_input, double pre_output)
             {
-                //double cur_output = (2 * T - gm.dt) / (2 * T + gm.dt) * pre_output + gm.dt / (2 * T + gm.dt) * (cur_input + pre_input);
-
-                double cur_output = pre_output + (-pre_output / T + pre_input / T) * gm.dt;
+                double cur_output = pre_output + (-pre_output / gm.FilterTimeConstant + pre_input / gm.FilterTimeConstant) * gm.dt;
                 return cur_output;
             }
         }

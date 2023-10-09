@@ -52,8 +52,6 @@ namespace Car
         public Tool.QuoteFromCsv quoteFromCsv;
         public Input input;
         public Vehicle.GetVelocity getVelocity;
-        public Vehicle.WaveIntegral waveIntegral;
-        public Vehicle.WaveAdjust waveAdjust;
 
         [HideInInspector]
         public bool DelayVehicle;
@@ -77,8 +75,6 @@ namespace Car
         public bool HandleController;
         [HideInInspector]
         public bool WaveFilter;
-        [HideInInspector]
-        public bool SensorFilter;
 
         [HideInInspector]
         public double dt;
@@ -209,12 +205,6 @@ namespace Car
         [HideInInspector]
         public double SF;   // スケーリング係数
         [HideInInspector]
-        public double SFI;
-        [HideInInspector]
-        public double power;
-        [HideInInspector]
-        public double energy;
-        [HideInInspector]
         public double lowerLimitVelocity;
         [HideInInspector]
         public double HandleControllerAngle;
@@ -223,7 +213,7 @@ namespace Car
         [HideInInspector]
         public double HandleControllerAngleMax;
         [HideInInspector]
-        public double lamda;
+        public double FilterTimeConstant;
 
         private void Awake()
         {
@@ -242,8 +232,6 @@ namespace Car
         {
             DelayVehicle = mode.DelayVehicle;
             WaveVariableTransformation = mode.WaveVariableTransformation;
-            WaveIntegral = mode.WaveIntegral;
-            WaveAdjust = mode.WaveAdjust;
             LookDown = mode.LookDown;
             ConstantVelocity = mode.ConstantVelocity;
             Stop = mode.Stop;
@@ -251,7 +239,6 @@ namespace Car
             GamepadInput = mode.GamepadInput;
             HandleController = mode.HandleController;
             WaveFilter = mode.WaveFilter;
-            SensorFilter = mode.SensorFilter;
 
             delay = parameter.delay;
             oneWayDelayIndex = 0;
@@ -283,13 +270,10 @@ namespace Car
             brakeMax = parameter.brakeMax;
             vel0 = unitAdjuster.V0_m_s;
             SF = shareParam.SF;
-            SFI = shareParam.SFI;
             CI = CISolver();
-            CII = shareParam.CII;
-            energy = 0;
             lowerLimitVelocity = unitAdjuster.LowerLimitVelocity_m_s;
             HandleControllerAngleMax = parameter.HandleControllerAngleMax;
-            lamda = parameter.lamda;
+            FilterTimeConstant = parameter.FilterTimeConstant;
             UpdateValue();
         }
 
@@ -297,9 +281,6 @@ namespace Car
         {
             GetTimeInformation();
             UpdateValue();
-
-            Debug.Log(gm.A[1, 0]);
-            //Debug.Log(gm.thetam - gm.thetas);
         }
 
         void GetTimeInformation()

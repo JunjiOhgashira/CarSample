@@ -87,15 +87,6 @@ namespace Car
                         gm.HandleControllerAngle = sign * amp / 2 * (Math.Sin(2 * Math.PI * (t - (constantTime + period / 4)) / period) + 1);
                     }
 
-                    //if(t > 0 && t < step)
-                    //{
-                    //    gm.HandleControllerAngle = sign * amp * t / step;
-                    //}
-                    //else if(t > step)
-                    //{
-                    //    gm.HandleControllerAngle = sign * amp;
-                    //}
-
                     t += Time.deltaTime;
                 }
                 else
@@ -120,33 +111,6 @@ namespace Car
                     gm.accel = 0.0;
                     gm.brake = 0.0;
                 }
-
-                //var current = Gamepad.current;
-
-                //if (current.buttonEast.isPressed)
-                //{
-                //    if (t < period / 4)
-                //    {
-                //        Debug.Log("a");
-                //        gm.HandleControllerAngle = amp * Math.Sin(2 * Math.PI * t / period);
-                //    }
-                //    else if (t < period / 4 + constantTime)
-                //    {
-                //        Debug.Log("b");
-                //        gm.HandleControllerAngle = amp;
-                //    }
-                //    else if(t < period / 2 + constantTime)
-                //    {
-                //        Debug.Log("c");
-                //        gm.HandleControllerAngle = amp * Math.Sin(2 * Math.PI * (t - constantTime) / period);
-                //    }
-                //    else
-                //    {
-                //        Debug.Log("d");
-                //        gm.HandleControllerAngle = 0;
-                //    }
-                //    t += Time.deltaTime;
-                //}
 
                 gm.FrontWheelAngle = gm.HandleControllerAngle / gm.gearRatio;
             }

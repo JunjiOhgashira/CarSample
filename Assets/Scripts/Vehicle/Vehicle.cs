@@ -14,16 +14,6 @@ namespace Car
             public GameManager gm;
             public LPF lPF;
 
-            double deltam_cur_output;
-            double deltam_pre_output;
-            double deltam_cur_input;
-            double deltam_pre_input;
-
-            double omegas_cur_output;
-            double omegas_pre_output;
-            double omegas_cur_input;
-            double omegas_pre_input;
-
             void FixedUpdate()
             {
                 OperationInput();
@@ -33,18 +23,7 @@ namespace Car
 
             void OperationInput()
             {
-                if (gm.SensorFilter)
-                {
-                    deltam_cur_input = gm.FrontWheelAngle;
-                    deltam_cur_output = lPF.Filter(deltam_pre_input, deltam_cur_input, deltam_pre_output);
-                    deltam_pre_input = deltam_cur_input;
-                    deltam_pre_output = deltam_cur_output;
-                    gm.deltam = deltam_cur_output;
-                }
-                else
-                {
-                    gm.deltam = gm.FrontWheelAngle;
-                }
+                gm.deltam = gm.FrontWheelAngle;
             }
 
             void VehicleModel()
@@ -53,57 +32,14 @@ namespace Car
                 {
                     gm.A = new double[,] { { -gm.a11 / gm.vels, -1 - gm.a12 / (gm.vels * gm.vels) }, { -gm.a21, -gm.a22 / gm.vels } };
                     gm.B = new double[,] { { gm.b1 / gm.vels }, { gm.b2 } };
-                    gm.beta += (gm.A[0, 0] * gm.beta + gm.A[0, 1] * omegas_pre_input + gm.B[0, 0] * gm.deltas) * gm.dt;
-
-                    if (gm.SensorFilter)
-                    {
-                        omegas_cur_input += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * omegas_pre_input + gm.B[1, 0] * gm.deltas) * gm.dt;
-                        omegas_cur_output = lPF.Filter(omegas_pre_input, omegas_cur_input, omegas_pre_output);
-                        omegas_pre_input = omegas_cur_input;
-                        omegas_pre_output = omegas_cur_output;
-                        gm.omegas = omegas_cur_output;
-                    }
-                    else
-                    {
-                        gm.omegas += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * gm.omegas + gm.B[1, 0] * gm.deltas) * gm.dt;
-                    }
+                    gm.beta += (gm.A[0, 0] * gm.beta + gm.A[0, 1] * gm.omegas + gm.B[0, 0] * gm.deltas) * gm.dt;
+                    gm.omegas += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * gm.omegas + gm.B[1, 0] * gm.deltas) * gm.dt;
                 }
             }
 
             void GetPosition()
             {
-                if (gm.WaveIntegral)
-                {
-                    var deltam_sum = gm.deltam_sum.Sum();
-                    var thetas_T = gm.all[gm.oneWayDelayIndex].thetas;
-                    var thetam_2T = gm.all[gm.roundTripDelayIndex].thetam;
-                    gm.thetam = thetas_T + 0.7 * (thetas_T - thetam_2T) + gm.CII * deltam_sum * gm.dt;
-                    //gm.thetam = gm.CII * gm.epsilonm - Math.Sqrt(2 * gm.CII) * gm.Vm;
-                }
-                else if (gm.WaveVariableTransformation)
-                {
-                    var b = gm.CI;
-                    var D = gm.SF;
-                    var V = gm.velm;
-                    var l = gm.l;
-                    var D2 = Math.Pow(D, 2);
-                    var plus = 1 + D2;
-                    var minus = 1 - D2;
-                    var omegae = (Math.Pow(1 - D, 2) * V + minus * b * l) / (plus * b * l + minus * V) * b;
-                    var K = omegae * l / (V * gm.delay / 1000.0);
-
-                    if (gm.waveAdjust)
-                    {
-                        gm.thetam += gm.omegam * gm.dt;
-                    }
-                    else
-                    {
-                        gm.thetam += gm.omegam * gm.dt;
-                        //gm.thetam += (gm.omegam - 0.1 * (gm.thetam - gm.thetas)) * gm.dt;
-                        //gm.thetam += (gm.omegam - K * (gm.thetam - gm.thetas)) * gm.dt;
-                    }
-                }
-
+                gm.thetam += gm.omegam * gm.dt;
                 gm.pxm = gm.all[gm.oneWayDelayIndex].pxs;
                 gm.pym = gm.all[gm.oneWayDelayIndex].pys;
                 gm.masterAzimuth = new Vector3(0, (float)gm.thetas - 90, 0);
@@ -114,8 +50,6 @@ namespace Car
                 gm.pys += gm.vels * Math.Sin((gm.thetas + gm.beta) * Math.PI / 180) * gm.dt;
                 gm.slaveAzimuth = new Vector3(0, (float)gm.thetas, 0);
                 gm.slavePosition = new Vector3((float)gm.pys, (float)(gm.height / 2), (float)gm.pxs);
-
-                //Debug.Log(gm.thetam - gm.all[gm.oneWayDelayIndex].thetas);
             }
         }
     }

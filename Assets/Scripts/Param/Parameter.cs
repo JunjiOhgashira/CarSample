@@ -60,6 +60,6 @@ public class Parameter : ScriptableObject
     [Label("ハンコン最大角")]
     public double HandleControllerAngleMax;
 
-    [Label("波信号調整帯域幅")]
-    public double lamda;
+    [Label("フィルタ時定数")]
+    public double FilterTimeConstant;
 }

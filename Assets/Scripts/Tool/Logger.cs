@@ -19,8 +19,6 @@ namespace Car
             public ModeChange modeChange;
             public Vehicle.Input input;
             public Vehicle.WaveNormal waveNormal;
-            public Vehicle.WaveAdjust waveAdjust;
-            public Vehicle.WaveAdjustSecond waveAdjustSecond;
 
             public string delay_text;
             public string method_text;
@@ -53,7 +51,6 @@ namespace Car
                 DataToWrite[11] = gm.us.ToString();
                 DataToWrite[12] = gm.vm.ToString();
                 DataToWrite[13] = gm.vs.ToString();
-                DataToWrite[14] = gm.energy.ToString();
                 DataToWrite[15] = gm.CI.ToString();
                 DataToWrite[16] = gm.vels.ToString();
             }
