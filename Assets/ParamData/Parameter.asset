@@ -15,7 +15,7 @@ MonoBehaviour:
   delay: 250
   M: 2010
   I: 4295
-  V: 10
+  V: 15
   l: 2.705
   lf: 1.3525
   lr: 1.3525
@@ -29,5 +29,5 @@ MonoBehaviour:
   accelMax: 2
   brakeMax: 2
   LowerLimitVelocity: 1
-  HandleControllerAngleMax: 90
+  HandleControllerAngleMax: 180
   FilterTimeConstant: 0.2

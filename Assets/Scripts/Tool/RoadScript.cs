@@ -131,11 +131,11 @@ namespace Car
                 for (int i = 0; i < (vertices.Count - 2); i += 2)
                 {
                     triangles.Add(i + 0);
-                    triangles.Add(i + 2);
-                    triangles.Add(i + 1);
                     triangles.Add(i + 1);
                     triangles.Add(i + 2);
+                    triangles.Add(i + 1);
                     triangles.Add(i + 3);
+                    triangles.Add(i + 2);
                 }
 
                 // UV列は道路テクスチャのパターンを繰り返し適用するため、下記のように設定する。

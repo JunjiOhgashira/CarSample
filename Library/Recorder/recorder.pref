@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: none
   m_EditorClassIdentifier: 
   enabled: 1
-  take: 193
+  take: 195
   captureEveryNthFrame: 1
   fileNameGenerator:
     m_Path:
