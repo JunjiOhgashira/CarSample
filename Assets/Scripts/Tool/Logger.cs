@@ -19,6 +19,7 @@ namespace Car
             public ModeChange modeChange;
             public Vehicle.Input input;
             public Vehicle.WaveNormal waveNormal;
+            public ObstacleGeneration obstacleGeneration;
 
             public string delay_text;
             public string method_text;
@@ -53,11 +54,13 @@ namespace Car
                 DataToWrite[13] = gm.vs.ToString();
                 DataToWrite[15] = gm.CI.ToString();
                 DataToWrite[16] = gm.vels.ToString();
+                DataToWrite[17] = obstacleGeneration.obstaclePosition.z.ToString();
+                DataToWrite[18] = obstacleGeneration.obstaclePosition.x.ToString();
             }
 
             void Start()
             {
-                DataToWrite = new string[17]
+                DataToWrite = new string[19]
                 {
                     "time",
                     "RTT",
@@ -75,7 +78,9 @@ namespace Car
                     "vs",
                     "energy",
                     "b",
-                    "velocity"
+                    "velocity",
+                    "obstaclex",
+                    "obstacley"
                 };
 
                 delay_text = "RTT" + (parameter.delay * 2).ToString() + "ms";

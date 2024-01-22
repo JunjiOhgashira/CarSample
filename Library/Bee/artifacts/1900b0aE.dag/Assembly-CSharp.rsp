@@ -366,6 +366,8 @@
 "Assets/Scripts/Tool/DynamicRoad.cs"
 "Assets/Scripts/Tool/Logger.cs"
 "Assets/Scripts/Tool/MeshManager.cs"
+"Assets/Scripts/Tool/Obstacle.cs"
+"Assets/Scripts/Tool/ObstacleGeneration.cs"
 "Assets/Scripts/Tool/QuoteFromCsv.cs"
 "Assets/Scripts/Tool/RoadScript.cs"
 "Assets/Scripts/Tool/ScreenShotCapturer.cs"

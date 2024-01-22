@@ -15,7 +15,7 @@ namespace Car
             private Mesh mesh;
             private List<Vector3> vertices = new List<Vector3>();
             private List<int> triangles = new List<int>();
-            private float width = 5;
+            public float width;
             private float length = 20;
             private float UnlimitedLength = 1000;
             private float height = 0;
@@ -30,7 +30,7 @@ namespace Car
             private float CurveInnerProduct = 0;
             private float CurvePreInnerProduct = 0;
             private Vector3 CurveEnd = new Vector3(0, 0, 0);
-            private float StraightLength = 20;
+            private float StraightLength = 2000;
             private float UnknownLength = 15;
 
             private List<Vector3> Coordinates = new List<Vector3>();
