@@ -29,5 +29,5 @@ MonoBehaviour:
   accelMax: 2
   brakeMax: 2
   LowerLimitVelocity: 1
-  HandleControllerAngleMax: 180
+  HandleControllerAngleMax: 360
   FilterTimeConstant: 0.2

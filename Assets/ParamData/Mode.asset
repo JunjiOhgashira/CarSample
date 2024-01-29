@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DelayVehicle: 1
   WaveVariableTransformation: 1
-  WaveIntegral: 0
-  WaveAdjust: 0
   LookDown: 0
   ConstantVelocity: 1
   Stop: 0
   ExperimentData: 0
-  GamepadInput: 0
+  GamepadInput: 1
   HandleController: 0
   WaveFilter: 1
-  SensorFilter: 0

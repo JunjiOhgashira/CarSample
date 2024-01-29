@@ -32,7 +32,7 @@ namespace Car
                 {
                     gm.A = new double[,] { { -gm.a11 / gm.vels, -1 - gm.a12 / (gm.vels * gm.vels) }, { -gm.a21, -gm.a22 / gm.vels } };
                     gm.B = new double[,] { { gm.b1 / gm.vels }, { gm.b2 } };
-                    gm.beta += (gm.A[0, 0] * gm.beta + gm.A[0, 1] * gm.omegas + gm.B[0, 0] * gm.deltas) * gm.dt;
+                    gm.beta   += (gm.A[0, 0] * gm.beta + gm.A[0, 1] * gm.omegas + gm.B[0, 0] * gm.deltas) * gm.dt;
                     gm.omegas += (gm.A[1, 0] * gm.beta + gm.A[1, 1] * gm.omegas + gm.B[1, 0] * gm.deltas) * gm.dt;
                 }
             }
@@ -42,7 +42,7 @@ namespace Car
                 gm.thetam += gm.omegam * gm.dt;
                 gm.pxm = gm.all[gm.oneWayDelayIndex].pxs;
                 gm.pym = gm.all[gm.oneWayDelayIndex].pys;
-                gm.masterAzimuth = new Vector3(0, (float)gm.thetas - 90, 0);
+                gm.masterAzimuth = new Vector3(0, (float)gm.all[gm.oneWayDelayIndex].thetas - 90, 0);
                 gm.masterPosition = new Vector3((float)gm.pym, (float)(gm.height / 2), (float)gm.pxm);
 
                 gm.thetas += gm.omegas * gm.dt;

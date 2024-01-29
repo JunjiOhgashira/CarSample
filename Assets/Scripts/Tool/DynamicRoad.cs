@@ -247,8 +247,6 @@ namespace Car
                     }
                 }
 
-                Debug.Log(CurveInnerProduct);
-
                 StraightPreInnerProduct = StraightInnerProduct;
                 CurvePreInnerProduct = CurveInnerProduct;
             }

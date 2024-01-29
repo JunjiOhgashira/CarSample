@@ -12,7 +12,7 @@ namespace Car
             public float Size;
             void Start()
             {
-                Size = 1;
+                Size = 0.5f;
                 transform.localScale = new Vector3(Size, Size, Size);
             }
         }

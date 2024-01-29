@@ -15,7 +15,6 @@ namespace Car
             public List<Vector3> obstacles = new List<Vector3>();
 
             private float elapsedTime;
-            private float preElapsedTime;
             public Vector3 obstaclePosition;
 
             void Start()
@@ -25,20 +24,17 @@ namespace Car
 
             void Update()
             {
-                elapsedTime = Time.time - (int)Time.time;
-                if(elapsedTime < preElapsedTime)
+                elapsedTime += Time.deltaTime;
+                if(elapsedTime > 3)
                 {
-                    if(Random.Range(0.0f, 1.0f) < 0.4)
-                    {
-                        Create();
-                    }
+                    Create();
+                    elapsedTime = 0;
                 }
-                preElapsedTime = elapsedTime;
             }
 
             void Create()
             {
-                obstaclePosition = new Vector3(Random.Range(-2.0f, 2.0f), 0.5f, (float)gm.pxs + 10);
+                obstaclePosition = new Vector3(Random.Range(-1.2f, 1.2f), 0.5f, (float)gm.pxs + 8);
                 var ob = Instantiate(createPrefab, obstaclePosition, createPrefab.transform.rotation);
                 var pos = ob.transform.position;
                 obstacles.Add(pos);

@@ -281,6 +281,8 @@ namespace Car
         {
             GetTimeInformation();
             UpdateValue();
+
+            Debug.Log(gm.masterAzimuth.y);
         }
 
         void GetTimeInformation()
