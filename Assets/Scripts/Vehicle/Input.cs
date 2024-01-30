@@ -55,7 +55,8 @@ namespace Car
                     if (LogitechGSDK.LogiUpdate() && LogitechGSDK.LogiIsConnected(0))
                     {
                         LogitechGSDK.DIJOYSTATE2ENGINES rec = LogitechGSDK.LogiGetStateUnity(0);
-                        gm.HandleControllerAngle = rec.lX / 32768f * 450;
+                        // gm.HandleControllerAngle = rec.lX / 32768f * 450;
+                        gm.HandleControllerAngle = rec.lX / 32768f * 450 * 3;
                         gm.accel = -(rec.lY / 65536f - 0.4999847f) * gm.accelMax;
                         gm.brake = -(rec.lRz / 65536f - 0.4999847f) * gm.brakeMax;
                     }

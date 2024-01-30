@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 992389a411e570e4898213cee9d71d79, type: 3}
   m_Name: ShareParam
   m_EditorClassIdentifier: 
-  CI: 5
+  CI: 17
   SF: 1
-  CII: 10
-  SFI: 10

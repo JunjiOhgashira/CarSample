@@ -34,7 +34,7 @@ namespace Car
 
             void Create()
             {
-                obstaclePosition = new Vector3(Random.Range(-1.2f, 1.2f), 0.5f, (float)gm.pxs + 8);
+                obstaclePosition = new Vector3(Random.Range(-1.5f, 1.5f), 0.25f, (float)gm.pxs + 7);
                 var ob = Instantiate(createPrefab, obstaclePosition, createPrefab.transform.rotation);
                 var pos = ob.transform.position;
                 obstacles.Add(pos);

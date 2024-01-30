@@ -18,6 +18,6 @@ MonoBehaviour:
   ConstantVelocity: 1
   Stop: 0
   ExperimentData: 0
-  GamepadInput: 1
-  HandleController: 0
+  GamepadInput: 0
+  HandleController: 1
   WaveFilter: 1
